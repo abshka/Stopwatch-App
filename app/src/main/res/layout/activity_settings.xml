@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <TextView
+        android:id="@+id/tvSettingsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Настройки"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSettingsHeader"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp">
+
+        <RadioButton
+            android:id="@+id/radioContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Продолжать работу"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/radioPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Приостанавливать работу" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSaveSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сохранить"
+        android:layout_below="@id/radioGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+</RelativeLayout>
