@@ -1,14 +1,14 @@
 package com.abshka.stopwatchapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.abshka.stopwatchapp.databinding.ActivityMainBinding
 import java.util.*
 
-class MainActivity3 : AppCompatActivity() {
+class MainActivity4 : AppCompatActivity() {
 
     private var seconds = 0
     private var running = false
@@ -16,6 +16,7 @@ class MainActivity3 : AppCompatActivity() {
     private var continueRunning = true
 
     private val handler = Handler(Looper.getMainLooper())
+    private val laps = mutableListOf<String>()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -33,6 +34,8 @@ class MainActivity3 : AppCompatActivity() {
             seconds = savedInstanceState.getInt("seconds")
             running = savedInstanceState.getBoolean("running")
             wasRunning = savedInstanceState.getBoolean("wasRunning")
+            laps.addAll(savedInstanceState.getStringArrayList("laps") ?: mutableListOf())
+            displayLaps()
         }
 
         runTimer()
@@ -50,12 +53,13 @@ class MainActivity3 : AppCompatActivity() {
         binding.btnReset.setOnClickListener {
             running = false
             seconds = 0
+            laps.clear()
+            binding.lapContainer.removeAllViews()
             updateButtons()
         }
 
-        binding.btnSettings.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
+        binding.btnLap.setOnClickListener {
+            addLap()
         }
 
         updateButtons()
@@ -66,6 +70,7 @@ class MainActivity3 : AppCompatActivity() {
         outState.putInt("seconds", seconds)
         outState.putBoolean("running", running)
         outState.putBoolean("wasRunning", wasRunning)
+        outState.putStringArrayList("laps", ArrayList(laps))
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -73,6 +78,8 @@ class MainActivity3 : AppCompatActivity() {
         seconds = savedInstanceState.getInt("seconds")
         running = savedInstanceState.getBoolean("running")
         wasRunning = savedInstanceState.getBoolean("wasRunning")
+        laps.addAll(savedInstanceState.getStringArrayList("laps") ?: mutableListOf())
+        displayLaps()
     }
 
     override fun onPause() {
@@ -119,5 +126,29 @@ class MainActivity3 : AppCompatActivity() {
         binding.btnStart.isEnabled = !running
         binding.btnStop.isEnabled = running
         binding.btnReset.isEnabled = seconds > 0 && !running
+        binding.btnLap.isEnabled = running
+    }
+
+    private fun addLap() {
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+        val lapTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, secs)
+        laps.add(lapTime)
+        if (laps.size > 5) {
+            laps.removeAt(0)
+        }
+        displayLaps()
+    }
+
+    private fun displayLaps() {
+        binding.lapContainer.removeAllViews()
+        laps.forEach { lap ->
+            val lapTextView = TextView(this).apply {
+                textSize = 18f
+                text = lap
+            }
+            binding.lapContainer.addView(lapTextView)
+        }
     }
 }
