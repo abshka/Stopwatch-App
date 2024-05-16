@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.abshka.stopwatchapp.databinding.ActivityMainBinding
 import java.util.*
 
-class MainActivity5 : AppCompatActivity() {
+class MainActivity6 : AppCompatActivity() {
 
     private var seconds = 0
     private var running = false
@@ -169,9 +169,13 @@ class MainActivity5 : AppCompatActivity() {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
         val secs = seconds % 60
-        val participantResult = String.format(Locale.getDefault(), "Участник ${participants.size + 1}: %02d:%02d:%02d", hours, minutes, secs)
-        participants.add(participantResult)
-        displayParticipantResults()
+        val participantTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, secs)
+
+        ParticipantNameDialog(this) { name ->
+            val participantResult = "$name: $participantTime"
+            participants.add(participantResult)
+            displayParticipantResults()
+        }.show()
     }
 
     private fun displayParticipantResults() {
