@@ -1,14 +1,16 @@
 package com.abshka.stopwatchapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.abshka.stopwatchapp.databinding.ActivityMainBinding
 import java.util.*
 
-class MainActivity6 : AppCompatActivity() {
+class MainActivity7 : AppCompatActivity() {
 
     private var seconds = 0
     private var running = false
@@ -71,6 +73,12 @@ class MainActivity6 : AppCompatActivity() {
             saveParticipantResult()
         }
 
+        binding.btnShareResults.setOnClickListener {
+            val shareIntent = createShareIntent()
+            startActivity(shareIntent)
+        }
+
+
         updateButtons()
     }
 
@@ -113,6 +121,7 @@ class MainActivity6 : AppCompatActivity() {
         }
     }
 
+
     private fun runTimer() {
         val runnable = object : Runnable {
             override fun run() {
@@ -140,6 +149,7 @@ class MainActivity6 : AppCompatActivity() {
         binding.btnReset.isEnabled = seconds > 0 && !running
         binding.btnLap.isEnabled = running
         binding.btnCompetition.isEnabled = running
+        binding.btnShareResults.isVisible = !running && participants.isNotEmpty()
     }
 
     private fun addLap() {
@@ -152,6 +162,7 @@ class MainActivity6 : AppCompatActivity() {
             laps.removeAt(0)
         }
         displayLaps()
+        seconds = 0 // Обнуление переменной seconds после добавления круга
     }
 
     private fun displayLaps() {
@@ -187,5 +198,30 @@ class MainActivity6 : AppCompatActivity() {
             }
             binding.participantContainer.addView(resultTextView)
         }
+    }
+
+    private fun buildResultsMessage(): String {
+        val messageBuilder = StringBuilder()
+        messageBuilder.append("Результаты секундомера:\n\n")
+
+        participants.forEach { result ->
+            messageBuilder.append("$result\n")
+        }
+
+        messageBuilder.append("\nКруги:\n")
+        laps.forEach { lap ->
+            messageBuilder.append("$lap\n")
+        }
+
+        return messageBuilder.toString()
+    }
+
+    private fun createShareIntent(): Intent {
+        val resultsMessage = buildResultsMessage()
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, resultsMessage)
+        }
+        return Intent.createChooser(shareIntent, "Поделиться результатами")
     }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity6">
+    tools:context=".MainActivity7">
 
     <TextView
         android:id="@+id/tvTimer"
@@ -81,4 +81,12 @@
         android:layout_marginTop="20dp"
         android:padding="20dp" />
 
+    <Button
+        android:id="@+id/btnShareResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Поделиться результатами"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
 </RelativeLayout>

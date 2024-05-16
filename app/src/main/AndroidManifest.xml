@@ -12,7 +12,7 @@
         android:theme="@style/Theme.StopwatchApp"
         >
         <activity
-            android:name=".MainActivity6"
+            android:name=".MainActivity7"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
