@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.abshka.stopwatchapp.databinding.ActivityMainBinding
 import java.util.*
 
-class MainActivity4 : AppCompatActivity() {
+class MainActivity5 : AppCompatActivity() {
 
     private var seconds = 0
     private var running = false
@@ -17,6 +17,7 @@ class MainActivity4 : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
     private val laps = mutableListOf<String>()
+    private val participants = mutableListOf<String>()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -35,7 +36,9 @@ class MainActivity4 : AppCompatActivity() {
             running = savedInstanceState.getBoolean("running")
             wasRunning = savedInstanceState.getBoolean("wasRunning")
             laps.addAll(savedInstanceState.getStringArrayList("laps") ?: mutableListOf())
+            participants.addAll(savedInstanceState.getStringArrayList("participants") ?: mutableListOf())
             displayLaps()
+            displayParticipantResults()
         }
 
         runTimer()
@@ -54,12 +57,18 @@ class MainActivity4 : AppCompatActivity() {
             running = false
             seconds = 0
             laps.clear()
+            participants.clear()
             binding.lapContainer.removeAllViews()
+            binding.participantContainer.removeAllViews()
             updateButtons()
         }
 
         binding.btnLap.setOnClickListener {
             addLap()
+        }
+
+        binding.btnCompetition.setOnClickListener {
+            saveParticipantResult()
         }
 
         updateButtons()
@@ -71,6 +80,7 @@ class MainActivity4 : AppCompatActivity() {
         outState.putBoolean("running", running)
         outState.putBoolean("wasRunning", wasRunning)
         outState.putStringArrayList("laps", ArrayList(laps))
+        outState.putStringArrayList("participants", ArrayList(participants))
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -79,7 +89,9 @@ class MainActivity4 : AppCompatActivity() {
         running = savedInstanceState.getBoolean("running")
         wasRunning = savedInstanceState.getBoolean("wasRunning")
         laps.addAll(savedInstanceState.getStringArrayList("laps") ?: mutableListOf())
+        participants.addAll(savedInstanceState.getStringArrayList("participants") ?: mutableListOf())
         displayLaps()
+        displayParticipantResults()
     }
 
     override fun onPause() {
@@ -127,6 +139,7 @@ class MainActivity4 : AppCompatActivity() {
         binding.btnStop.isEnabled = running
         binding.btnReset.isEnabled = seconds > 0 && !running
         binding.btnLap.isEnabled = running
+        binding.btnCompetition.isEnabled = running
     }
 
     private fun addLap() {
@@ -149,6 +162,26 @@ class MainActivity4 : AppCompatActivity() {
                 text = lap
             }
             binding.lapContainer.addView(lapTextView)
+        }
+    }
+
+    private fun saveParticipantResult() {
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+        val participantResult = String.format(Locale.getDefault(), "Участник ${participants.size + 1}: %02d:%02d:%02d", hours, minutes, secs)
+        participants.add(participantResult)
+        displayParticipantResults()
+    }
+
+    private fun displayParticipantResults() {
+        binding.participantContainer.removeAllViews()
+        participants.forEach { result ->
+            val resultTextView = TextView(this).apply {
+                textSize = 18f
+                text = result
+            }
+            binding.participantContainer.addView(resultTextView)
         }
     }
 }

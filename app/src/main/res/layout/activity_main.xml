@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity4">
+    tools:context=".MainActivity5">
 
     <TextView
         android:id="@+id/tvTimer"
@@ -53,12 +53,31 @@
         android:layout_marginTop="20dp"
         android:enabled="false" />
 
+    <Button
+        android:id="@+id/btnCompetition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Соревнование"
+        android:layout_below="@id/btnLap"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:enabled="false" />
+
     <LinearLayout
         android:id="@+id/lapContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/btnLap"
+        android:layout_below="@id/btnCompetition"
+        android:layout_marginTop="20dp"
+        android:padding="20dp" />
+
+    <LinearLayout
+        android:id="@+id/participantContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/lapContainer"
         android:layout_marginTop="20dp"
         android:padding="20dp" />
 
