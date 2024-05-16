@@ -152,6 +152,7 @@ class MainActivity6 : AppCompatActivity() {
             laps.removeAt(0)
         }
         displayLaps()
+        seconds = 0 // Обнуление переменной seconds после добавления круга
     }
 
     private fun displayLaps() {
